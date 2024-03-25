@@ -1,10 +1,9 @@
-# soc-lab
+# SOC-MOCK Project
 Working on Full-Detailed documentation
-
-## SOC-MOCK Project
-
-#### Hardened Windows VM to reduce attack surface: 
-Implemented security best practices on the Windows VM, such as disabling unnecessary services, configuring firewall rules, and strengthening user account controls. This minimized potential entry points for attackers.
+<br>
+## Description
+### Hardened Windows VM to reduce attack surface: 
+- Implemented security best practices on the Windows VM, such as disabling unnecessary services, configuring firewall rules, and strengthening user account controls. This minimized potential entry points for attackers.
 ### Deployed security tools (Sysmon, LimaCharlie EDR) for threat detection: 
 - Installed and configured Sysmon for advanced system activity monitoring, capturing detailed logs of process creation, network connections, and file system modifications. Additionally, deployed LimaCharlie EDR to collect and analyze these logs in real-time, providing a comprehensive view of system activity for threat detection.
 
