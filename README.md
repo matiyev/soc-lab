@@ -1,5 +1,5 @@
 # SOC-MOCK Project
-Working on Full-Detailed documentation
+🛠️ Working on Full-Detailed documentation... 🛠️
 <br>
 ## Description
 ### Hardened Windows VM to reduce attack surface: 
