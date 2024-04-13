@@ -1,7 +1,5 @@
 
 # SOC-MOCK
-<br>
-
 ## Objective
 
 This project aimed to build a realistic Security Operations Center (SOC) training environment focusing on practical skills for detecting and responding to cyber threats.
@@ -48,45 +46,45 @@ Objectives were enhancing network security by implementing best practices such a
   ![Image](https://imgur.com/9VNGxVp.png)
     <br><br>
        
-  - **Step 3: Configure Windows VM**:  
+  - **Step 4: Configure Windows VM**:  
     Permanently disable Microsoft Defender so it doesn’t interfere with the fun stuff we’re planning. This is pretty tricky (especially in Windows 11) as Defender will turn itself back on.
 1. Disable Tamper Protection
-- Go to "Windows Security"
-- Click “Virus & threat protection”
-- Under “Virus & threat protection settings” click “Manage settings”
-- Toggle OFF the “Tamper Protection” switch. When prompted, click “Yes”
+  - Go to "Windows Security"
+  - Click “Virus & threat protection”
+  - Under “Virus & threat protection settings” click “Manage settings”
+  - Toggle OFF the “Tamper Protection” switch. When prompted, click “Yes”
 ![Image](https://imgur.com/iTuPTwi.png)
-- Toggle every other option OFF as well
+  - Toggle every other option OFF as well
 2. Permanently Disable Defender via Group Policy Editor
-- Click the “Start” menu icon
-- Type “cmd” into the search bar within the Start Menu
-- Right+Click “Command Prompt” and click “Run as administrator”
-- Run the following command
+  - Click the “Start” menu icon
+  - Type “cmd” into the search bar within the Start Menu
+  - Right+Click “Command Prompt” and click “Run as administrator”
+  - Run the following command
 ''' gpedit.msc '''
-- Inside the Local Group Policy Editor
-- Click Computer Configuration > Administrative Templates > Windows Components > Microsoft Defender Antivirus
-- Double-click “Turn off Microsoft Defender Antivirus”
-- Select “Enabled” (If you enable this policy setting, Defender doesn't run, and will not scan for malware or other potentially unwanted software)
-- Click "Apply"
+  - Inside the Local Group Policy Editor
+  - Click Computer Configuration > Administrative Templates > Windows Components > Microsoft Defender Antivirus
+  - Double-click “Turn off Microsoft Defender Antivirus”
+  - Select “Enabled” (If you enable this policy setting, Defender doesn't run, and will not scan for malware or other potentially unwanted software)
+  - Click "Apply"
 ![Image](https://imgur.com/9bsP5Lf.png)
 3. Permanently Disable Defender via Registry
-- From the same administrative cmd, copy/paste this command and press Enter
+  - From the same administrative cmd, copy/paste this command and press Enter
 '''
 REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
 '''
 4. Prepare to boot into Safe Mode to disable all Defender services
-- Click the “Start” menu icon
-- Type “msconfig” into the search bar
-- Go to “Boot” tab and select “Boot Options”
-- Check the box for “Safe boot” and “Minimal”
+  - Click the “Start” menu icon
+  - Type “msconfig” into the search bar
+  - Go to “Boot” tab and select “Boot Options”
+  - Check the box for “Safe boot” and “Minimal”
 ![Image](https://imgur.com/0K1OBWq.png)
-- Click Apply and OK
-- System will restart into Safe Mode
+  - Click Apply and OK
+  - System will restart into Safe Mode
 
 5. Now, in Safe Mode, we’ll disable some services via the Registry
-- Click the “Win + R"
-- Type “regedit” into the search bar and hit Enter
-- For each of the following registry locations, browse to the key, find the “Start” value, and change it to "4"
+  - Click the “Win + R"
+  - Type “regedit” into the search bar and hit Enter
+  - For each of the following registry locations, browse to the key, find the “Start” value, and change it to "4"
 ![Image](https://imgur.com/IWskQZt.png)
   - Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Sense
   - Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdBoot
@@ -95,8 +93,8 @@ REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpywar
   - Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdNisSvc
   - Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdFilter
 6.Leave Safe Mode the same way we got into it
-- Uncheck the box for “Safe boot”
-- System will restart into normal desktop environment, hopefully Defender-free
+  - Uncheck the box for “Safe boot”
+  - System will restart into normal desktop environment, hopefully Defender-free
     <br><br>
 </details>
 
