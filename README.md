@@ -19,4 +19,4 @@
 - Leveraged YARA, a tool for identifying malware based on textual or binary patterns. This allowed for targeted detection of specific malware families or malicious behaviors.
 - Developed a YARA rule specifically designed to identify the Sliver C2 framework, a common tool used by adversaries for remote control. This custom rule enhanced detection capabilities beyond pre-built signatures provided by EDR vendors.
 - Integrated YARA scanning into LimaCharlie's D&R framework. This enabled automated scans of downloaded files and running processes against the custom YARA rule, identifying potential malware infections.
-![Image](https://imgur.com/mVJRpdA) 
+![Image](https://i.imgur.com/mVJRpdA) 
