@@ -67,11 +67,13 @@ Objectives were enhancing network security by implementing best practices such a
 ![Image](https://imgur.com/9bsP5Lf.png)
 3. Permanently Disable Defender via Registry
   - From the same administrative cmd, copy/paste this command and press Enter
+  
   <br>
 '''
 REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
 '''
 </br>
+
 4. Prepare to boot into Safe Mode to disable all Defender services
   - Click the “Start” menu icon
   - Type “msconfig” into the search bar
@@ -105,4 +107,3 @@ REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpywar
 </details>
 =======
 </details>
->>>>>>> 39b4a99e5856f8fc142cb75c0a38fe3e17ace288
