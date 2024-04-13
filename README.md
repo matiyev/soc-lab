@@ -1,7 +1,5 @@
-
 # SOC-MOCK
 ## Objective
-
 This project aimed to build a realistic Security Operations Center (SOC) training environment focusing on practical skills for detecting and responding to cyber threats.
 Objectives were enhancing network security by implementing best practices such as disabling unnecessary services, configuring firewalls, and strengthening user account controls. Advanced threat detection tools like Sysmon and LimaCharlie EDR were deployed for real-time analysis. Adversary techniques were simulated, and threat responses were automated to stay ahead of potential risks. Additionally, YARA rules were integrated to enhance malware detection capabilities.
 <br><br>
@@ -101,4 +99,8 @@ REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpywar
 <details>
   <summary><h2><b>Section 2: Security Onion Initial Setup</b></h2></summary>
   Lets setup up and configure our Security Onion (NSM) Network Security Monitoring solution<br><br>
+<<<<<<< HEAD
 </details>
+=======
+</details>
+>>>>>>> 39b4a99e5856f8fc142cb75c0a38fe3e17ace288
