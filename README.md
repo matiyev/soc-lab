@@ -46,14 +46,14 @@ Objectives were enhancing network security by implementing best practices such a
        
   - **Step 4: Configure Windows VM**:  
     Permanently disable Microsoft Defender so it doesn’t interfere with the fun stuff we’re planning. This is pretty tricky (especially in Windows 11) as Defender will turn itself back on.
-1. Disable Tamper Protection
+I. Disable Tamper Protection
   - Go to "Windows Security"
   - Click “Virus & threat protection”
   - Under “Virus & threat protection settings” click “Manage settings”
   - Toggle OFF the “Tamper Protection” switch. When prompted, click “Yes”
 ![Image](https://imgur.com/iTuPTwi.png)
   - Toggle every other option OFF as well
-2. Permanently Disable Defender via Group Policy Editor
+II. Permanently Disable Defender via Group Policy Editor
   - Click the “Start” menu icon
   - Type “cmd” into the search bar within the Start Menu
   - Right+Click “Command Prompt” and click “Run as administrator”
@@ -65,16 +65,14 @@ Objectives were enhancing network security by implementing best practices such a
   - Select “Enabled” (If you enable this policy setting, Defender doesn't run, and will not scan for malware or other potentially unwanted software)
   - Click "Apply"
 ![Image](https://imgur.com/9bsP5Lf.png)
-3. Permanently Disable Defender via Registry
+III. Permanently Disable Defender via Registry
   - From the same administrative cmd, copy/paste this command and press Enter
-  
+
   <br>
-'''
-REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
-'''
+'''REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
 </br>
 
-4. Prepare to boot into Safe Mode to disable all Defender services
+IV. Prepare to boot into Safe Mode to disable all Defender services
   - Click the “Start” menu icon
   - Type “msconfig” into the search bar
   - Go to “Boot” tab and select “Boot Options”
@@ -83,7 +81,7 @@ REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpywar
   - Click Apply and OK
   - System will restart into Safe Mode
 
-5. Now, in Safe Mode, we’ll disable some services via the Registry
+V. Now, in Safe Mode, we’ll disable some services via the Registry
   - Click the “Win + R"
   - Type “regedit” into the search bar and hit Enter
   - For each of the following registry locations, browse to the key, find the “Start” value, and change it to "4"
@@ -94,7 +92,8 @@ REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpywar
   - Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdNisDrv
   - Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdNisSvc
   - Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WdFilter
-6.Leave Safe Mode the same way we got into it
+
+VI. Leave Safe Mode the same way we got into it
   - Uncheck the box for “Safe boot”
   - System will restart into normal desktop environment, hopefully Defender-free
     <br><br>
@@ -104,6 +103,4 @@ REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpywar
   <summary><h2><b>Section 2: Security Onion Initial Setup</b></h2></summary>
   Lets setup up and configure our Security Onion (NSM) Network Security Monitoring solution<br><br>
 <<<<<<< HEAD
-</details>
-=======
 </details>
