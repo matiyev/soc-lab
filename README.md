@@ -25,22 +25,22 @@ Objectives were enhancing network security by implementing best practices such a
     <br><br>
    **Step 2: Create a New VM for Windows 10**:  
    Next, set up a new virtual machine in VirtualBox for Windows 10.
-   - Create it with following minimum specs:
-    - RAM: Approx 2 GB
-    - Processors: 2 CPU cores
-    - Hard Disk Storage: 50 GB
+  - Create it with following minimum specs:
+   - RAM: Approx 2 GB
+   - Processors: 2 CPU cores
+   - Hard Disk Storage: 50 GB
     <br><br>
     
    **Step 3: Create a New VM for Ubuntu Server**:  
     Now, set up a new virtual machine in VirtualBox for Ubuntu Server.
-   - Create it with following minimum specs:
-    - RAM: Approx 2 GB
-    - Processors: 2 CPU cores
-    - Hard Disk Storage: 20 GB
-    - During OS install, ==leave defaults as is==
+  - Create it with following minimum specs:
+   - RAM: Approx 2 GB
+   - Processors: 2 CPU cores
+   - Hard Disk Storage: 20 GB
+   - During OS install, ==leave defaults as is==
   ![Image](https://imgur.com/GDfOZmg.png)
     <br><br>
-    - After installation it should look like this:
+  - After installation it should look like this:
   ![Image](https://imgur.com/9VNGxVp.png)
     <br><br>
        
@@ -67,9 +67,12 @@ Objectives were enhancing network security by implementing best practices such a
 ![Image](https://imgur.com/9bsP5Lf.png)
 3. Permanently Disable Defender via Registry
   - From the same administrative cmd, copy/paste this command and press Enter
+<br>
 
-  <br>
-```REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f```
+```
+REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
+```
+
 </br>
 
 4. Prepare to boot into Safe Mode to disable all Defender services
