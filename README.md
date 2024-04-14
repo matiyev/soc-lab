@@ -37,7 +37,7 @@ Objectives were enhancing network security by implementing best practices such a
    - RAM: Approx 2 GB
    - Processors: 2 CPU cores
    - Hard Disk Storage: 20 GB
-   - During OS install, ==leave defaults as is==
+   - During OS install, <mark>leave defaults as is</mark>
   ![Image](https://imgur.com/GDfOZmg.png)
     <br><br>
   - After installation it should look like this:
