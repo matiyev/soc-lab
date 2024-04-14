@@ -25,7 +25,7 @@ Objectives were enhancing network security by implementing best practices such a
     <br><br>
    **Step 2: Create a New VM for Windows 10**:  
    Next, set up a new virtual machine in VirtualBox for Windows 10.
-  - Create it with following minimum specs:
+  - **Create it with following minimum specs:**
    - RAM: Approx 2 GB
    - Processors: 2 CPU cores
    - Hard Disk Storage: 50 GB
@@ -33,11 +33,11 @@ Objectives were enhancing network security by implementing best practices such a
     
    **Step 3: Create a New VM for Ubuntu Server**:  
     Now, set up a new virtual machine in VirtualBox for Ubuntu Server.
-  - Create it with following minimum specs:
+  - **Create it with following minimum specs:**
    - RAM: Approx 2 GB
    - Processors: 2 CPU cores
    - Hard Disk Storage: 20 GB
-   - During OS install, <mark>leave defaults as is</mark>
+   - During OS install, **leave defaults as is**
   ![Image](https://imgur.com/GDfOZmg.png)
     <br><br>
   - After installation it should look like this:
@@ -58,7 +58,9 @@ Objectives were enhancing network security by implementing best practices such a
   - Type “cmd” into the search bar within the Start Menu
   - Right+Click “Command Prompt” and click “Run as administrator”
   - Run the following command
-''' gpedit.msc '''
+```
+gpedit.msc
+```
   - Inside the Local Group Policy Editor
   - Click Computer Configuration > Administrative Templates > Windows Components > Microsoft Defender Antivirus
   - Double-click “Turn off Microsoft Defender Antivirus”
@@ -85,7 +87,7 @@ REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpywar
   - System will restart into Safe Mode
 
 5. Now, in Safe Mode, we’ll disable some services via the Registry
-  - Click the “Win + R"
+  - Press the “Win + R"
   - Type “regedit” into the search bar and hit Enter
   - For each of the following registry locations, browse to the key, find the “Start” value, and change it to "4"
 ![Image](https://imgur.com/IWskQZt.png)
