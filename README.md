@@ -69,9 +69,7 @@ Objectives were enhancing network security by implementing best practices such a
   - From the same administrative cmd, copy/paste this command and press Enter
 
   <br>
-'''bash
-REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
-'''
+'''REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f'''
 </br>
 
 4. Prepare to boot into Safe Mode to disable all Defender services
