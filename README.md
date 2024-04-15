@@ -105,6 +105,149 @@ REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpywar
 </details>
 
 <details>
-  <summary><h2><b>Section 2: Security Onion Initial Setup</b></h2></summary>
-  Lets setup up and configure our Security Onion (NSM) Network Security Monitoring solution<br><br>
+  <summary><h2><b>Section 2: Install Sysmon in Windows VM</b></h2></summary>
+  This is actually optional in this project, but it’s a must-have analyst tool for getting very granular telemetry on your Windows endpoint. You can read more about it [here](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon).
+
+1. **Launch an Administrative PowerShell console for the following commands:**
+
+- Click the “Start” menu icon
+- Type “powershell” into the search bar within the Start Menu
+- Click “Windows PowerShell” and click “Run as administrator”
+
+2. **Download Sysmon with the following command:**
+```
+Invoke-WebRequest -Uri https://download.sysinternals.com/files/Sysmon.zip -OutFile C:\Windows\Temp\Sysmon.zip
+```
+3. **Unzip sysmon.zip**
+```
+Expand-Archive -LiteralPath C:\Windows\Temp\Sysmon.zip -DestinationPath C:\Windows\Temp\Sysmon
+```
+4. **Download SwiftOnSecurity’s Sysmon config**
+```
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/SwiftOnSecurity/sysmon-config/master/sysmonconfig-export.xml -OutFile C:\Windows\Temp\Sysmon\sysmonconfig.xml
+```
+5. **Install Sysmon with Swift’s config**
+```
+C:\Windows\Temp\Sysmon\Sysmon64.exe -accepteula -i C:\Windows\Temp\Sysmon\sysmonconfig.xml
+```
+![Image](.png)
+
+6. **Check Sysmon64 service is installed and running**
+```
+Get-Service sysmon64
+```
+7. **Check for the presence of Sysmon Event Logs**
+```
+Get-WinEvent -LogName "Microsoft-Windows-Sysmon/Operational" -MaxEvents 10
+```
+  <br><br>
+</details>
+
+<details>
+  <summary><h2><b>Section 3: Install LimaCharlie EDR on Windows VM</b></h2></summary>
+  [LimaCharlie](https://limacharlie.io) is a very powerful SecOps Cloud Platform. It not only comes with a cross-platform EDR agent, but also handles all of the log shipping/ingestion and has a threat detection engine. In free version you can create for up to two systems which is great for projects like this.
+
+1. **Create a free LimaCharlie account**
+- LimaCharlie will ask you a few questions about your role. Answer however you like.
+
+2. **create an organization**
+
+Name: *Anything*
+
+Data Residency Region: *Closest to you*
+
+Demo Configuration Enabled: *Disabled*
+
+Template: *Extended Detection & Response Standard*
+![Image](.png)
+
+3. **Click "Add a Sensor"**
+
+- Select Windows
+- Provide a description such as: Windows VM - Lab
+- Click Create
+- Select the Installation Key we just created
+![Image](.png)
+- Select the "x86-64 (.exe)" sensor
+![Image](.png)
+
+- In Windows VM, open an Administrative PowerShell and paste the following commands:
+```
+cd C:\Users\User\Downloads
+```
+```
+Invoke-WebRequest -Uri https://downloads.limacharlie.io/sensor/windows/64 -Outfile C:\Users\User\Downloads\lc_sensor.exe
+```
+- Shift into a standard admin cmd
+
+- Copy the install command provided by LimaCharlie which contains the installation key. Paste this command into your open terminal.
+![Image](.png)
+
+- Paste this command into the admin command prompt in your Windows VM
+
+- If everything worked correctly, in the LimaCharlie web UI you should see the sensor reporting in
+
+
+4. **Configure LimaCharlie to also ship the Sysmon event logs alongside its own EDR telemetry**
+
+- In the left-side menu, click “Artifact Collection”
+- Next to “Artifact Collection Rules” click “Add Rule”
+```
+Name: windows-sysmon-logs
+Platforms: Windows
+Path Pattern: wel://Microsoft-Windows-Sysmon/Operational:*
+Retention Period: 10
+```
+- Click “Save Rule”
+
+LimaCharlie will now start shipping Sysmon logs which provide a wealth of EDR-like telemetry, some of which is redundant to LC’s own telemetry, but Sysmon is still a very power visibility tool that runs well alongside any EDR agent.
+
+The other reason we are ingesting Sysmon logs is that the built-in Sigma rules we previously enabled largely depend on Sysmon logs as that is what most of them were written for.
+
+*Pro Tip*: Now would be a good time to Snapshot your Windows VM.
+<br>
+</details>
+
+<details>
+  <summary><h2><b>Section 4: Setup Attack System </b></h2></summary>
+  I recommend using an SSH client to access the Ubuntu VM so that you can easily copy/paste commands.
+
+1. Open your CLI
+
+```
+ssh username@[Linux_VM_IP]
+```
+
+2. Now, from within this new SSH session, proceed with the following instructions to setup our attacker C2 server. First, gain access to the root shell to make life easier.
+
+```
+sudo su
+```
+
+3. Run the following commands to download Sliver, a Command & Control (C2) framework by BishopFox. I recommend copy/pasting the entire block as there is line-wrapping occurring.
+
+- Download Sliver Linux server binary
+```
+wget https://github.com/BishopFox/sliver/releases/download/v1.5.34/sliver-server_linux -O /usr/local/bin/sliver-server
+```
+- Make it executable
+```
+chmod +x /usr/local/bin/sliver-server
+```
+- install mingw-w64 for additional capabilities
+```
+apt install -y mingw-w64
+```
+- Create our future working directory
+```
+mkdir -p /opt/sliver
+```
+
+I recommend exploring the LimaCharlie web interface to learn more about what it can do.
+</details>
+
+
+<details>
+  <summary><h2><b>Section : </b></h2></summary>
+  Description
 </details>
