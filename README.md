@@ -106,8 +106,8 @@ REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpywar
 
 <details>
   <summary><h2><b>Section 2: Install Sysmon in Windows VM</b></h2></summary>
-This is actually optional in this project, but it’s a must-have analyst tool for getting very granular telemetry on your Windows endpoint. You can read more about it
 
+This is actually optional in this project, but it’s a must-have analyst tool for getting very granular telemetry on your Windows endpoint. You can read more about it
 [here](https://www.learn.microsoft.com/en-us/sysinternals/downloads/sysmon/). 
 
 1. **Launch an Administrative PowerShell console for the following commands:**
