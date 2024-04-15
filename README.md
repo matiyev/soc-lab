@@ -106,7 +106,9 @@ REG ADD "hklm\software\policies\microsoft\windows defender" /v DisableAntiSpywar
 
 <details>
   <summary><h2><b>Section 2: Install Sysmon in Windows VM</b></h2></summary>
-  This is actually optional in this project, but it’s a must-have analyst tool for getting very granular telemetry on your Windows endpoint. You can read more about it [here](https://www.learn.microsoft.com/en-us/sysinternals/downloads/sysmon/). [Duck Duck Go](https://duckduckgo.com)
+  This is actually optional in this project, but it’s a must-have analyst tool for getting very granular telemetry on your Windows endpoint. You can read more about it 
+  
+  [here](https://www.learn.microsoft.com/en-us/sysinternals/downloads/sysmon/). 
 
 1. **Launch an Administrative PowerShell console for the following commands:**
 
@@ -145,7 +147,9 @@ Get-WinEvent -LogName "Microsoft-Windows-Sysmon/Operational" -MaxEvents 10
 
 <details>
   <summary><h2><b>Section 3: Install LimaCharlie EDR on Windows VM</b></h2></summary>
-  [LimaCharlie](https://www.limacharlie.io/) is a very powerful SecOps Cloud Platform. It not only comes with a cross-platform EDR agent, but also handles all of the log shipping/ingestion and has a threat detection engine. In free version you can create for up to two systems which is great for projects like this.
+  
+  [LimaCharlie](https://www.limacharlie.io/) 
+  is a very powerful SecOps Cloud Platform. It not only comes with a cross-platform EDR agent, but also handles all of the log shipping/ingestion and has a threat detection engine. In free version you can create for up to two systems which is great for projects like this.
 
 1. **Create a free LimaCharlie account**
 - LimaCharlie will ask you a few questions about your role. Answer however you like.
