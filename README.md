@@ -3,20 +3,20 @@
 This project aimed to build a realistic Security Operations Center (SOC) training environment focusing on practical skills for detecting and responding to cyber threats.
 - Advanced threat detection tools like Sysmon and LimaCharlie EDR were deployed for real-time analysis
 - Adversary techniques were simulated, and threat responses were automated to stay ahead of potential risks
-- YARA rules were integrated to enhance malware detection capabilities.
+- YARA rules were integrated to enhance malware detection capabilities
 <br><br>
 
 ## Components
 
-- **VirtualBox**: Used for creating and managing virtual machines.
-- **Ubuntu Server VM**: Used to deploy the Sliver C2 framework, which acts as a simulated attacker tool.
-- **Windows VM**: Used as victim endpoint device.
-- **LimaCharlie EDR**: An EDR platform used to collect, analyze logs and investigate telemetry from the Windows VM.
-- **Sliver C2**: A simulated attacker tool used to create a Command & Control (C2) server on the Ubuntu VM.
-- **YARA Rules**: Specific sets of instructions used to identify malware based on patterns.
-- **Sysmon**: Windows system service used to monitor and log system activity to the event log.
-- **VirusTotal**: A service for analyzing suspicious files and URLs for malware.
-- **NAT Network**: Configured in VirtualBox for network simulation.
+- **VirtualBox**: Used for creating and managing virtual machines
+- **Ubuntu Server VM**: Used to deploy the Sliver C2 framework, which acts as a simulated attacker tool
+- **Windows VM**: Used as victim endpoint device
+- **LimaCharlie EDR**: An EDR platform used to collect, analyze logs and investigate telemetry from the Windows VM
+- **Sliver C2**: A simulated attacker tool used to create a Command & Control (C2) server on the Ubuntu VM
+- **YARA Rules**: Specific sets of instructions used to identify malware based on patterns
+- **Sysmon**: Windows system service used to monitor and log system activity to the event log
+- **VirusTotal**: A service for analyzing suspicious files and URLs for malware
+- **NAT Network**: Configured in VirtualBox for network simulation
 
 <details>
   <summary><h2><b>Section 1: Setting up the Virtual Environment</b></h2></summary>
