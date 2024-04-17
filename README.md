@@ -254,7 +254,7 @@ Explore the LimaCharlie web interface to learn more about what it can do!
 <details>
   <summary><h2><b>Section 5: Generate the Command & Control payload </b></h2></summary>
   Either from your SSH session or directly from your Ubuntu Server, take the following actions:
-  <br>
+  <br></br>
 
   1. **Access root shell and change dir to Sliver install**
 
