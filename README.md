@@ -299,7 +299,7 @@ Now would be a good time to snapshot your Windows VM, before we execute the malw
 
 </details>
 <details>
-  <summary><h2><b>Section 6: Star Command & Control Session  </b></h2></summary>
+  <summary><h2><b>Section 6: Start Command & Control Session  </b></h2></summary>
 
 1. **Now that the payload is on the Windows VM, switch back to the Linux VM SSH session and enable the Sliver HTTP server to catch the callback**
 
@@ -329,7 +329,8 @@ sessions
 ```
 use [session_id]
 ```
-6. **C0ngratulations! You pwned your Windows VM. Now, run a few basic commands**
+> C0ngratulations! You pwned your Windows VM
+6. **Now, run a few basic commands**
 
 - To get info about the session
 ```
@@ -342,8 +343,8 @@ whoami
 ```
 getprivs
 ```
-- If your implant was properly run with Admin rights, you’ll notice you have a few privileges that make further attack activity much easier, such as “SeDebugPrivilege” — if you don't see these privileges, make sure you ran the implant from an Admin command prompt
-- Identify our implant’s working dir
+> If your implant was properly run with Admin rights, you’ll notice you have a few privileges that make further attack activity much easier, such as “SeDebugPrivilege” — if you don't see these privileges, make sure you ran the implant from an Admin command prompt
+- Identify implant’s working dir
 ```
 pwd
 ```
