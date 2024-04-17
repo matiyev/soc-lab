@@ -1,7 +1,9 @@
 # SOC-MOCK
 ## Objective
 This project aimed to build a realistic Security Operations Center (SOC) training environment focusing on practical skills for detecting and responding to cyber threats.
-Objectives were enhancing network security by implementing best practices such as disabling unnecessary services, configuring firewalls, and strengthening user account controls. Advanced threat detection tools like Sysmon and LimaCharlie EDR were deployed for real-time analysis. Adversary techniques were simulated, and threat responses were automated to stay ahead of potential risks. Additionally, YARA rules were integrated to enhance malware detection capabilities.
+- Advanced threat detection tools like Sysmon and LimaCharlie EDR were deployed for real-time analysis
+- Adversary techniques were simulated, and threat responses were automated to stay ahead of potential risks
+- YARA rules were integrated to enhance malware detection capabilities.
 <br><br>
 
 ## Components
