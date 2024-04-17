@@ -132,7 +132,7 @@ Invoke-WebRequest -Uri https://raw.githubusercontent.com/SwiftOnSecurity/sysmon-
 ```
 C:\Windows\Temp\Sysmon\Sysmon64.exe -accepteula -i C:\Windows\Temp\Sysmon\sysmonconfig.xml
 ```
-![Image](.png)
+![Image](https://imgur.com/eUuEwgD.png)
 
 6. **Check Sysmon64 service is installed and running**
 ```
@@ -329,7 +329,7 @@ sessions
 ```
 use [session_id]
 ```
-> C0ngratulations! You pwned your Windows VM
+> c0ngratulations! you pwned your Windows VM
 6. **Now, run a few basic commands**
 
 - To get info about the session
@@ -357,6 +357,59 @@ netstat
 ps -T
 ```
 > Notice that Sliver highlights its own process in green and any defensive tools in red. This is how attackers become aware of what security products a victim system using.
+  </details>
+
+<details>
+  <summary><h2><b>Section 7: Observe EDR Telemetry</b></h2></summary>
+
+1. **Hop into the LimaCharlie web UI and check out some basic features**
+
+- Click “Sensors” on left menu
+
+- Click your active Windows sensor
+
+
+- On the new left-side menu for this sensor, click “Processes”
+
+
+> Explore what is returned in the process tree. Hover over some of the icons to see what they represent
+
+Knowing common processes on a system is very important. As Professionalas say at SANS, “you must know normal before you can find evil.” Check out this [“Hunt Evil”](https://www.sans.org/posters/hunt-evil/) poster from SANS.
+
+
+2. **One of the easiest ways to spot unusual processes is to simply look for ones that are NOT signed**
+- The C2 implant shows as not signed, and is also active on the network.
+
+
+- Notice how quickly we are able to identify the destination IP this process is communicating with.
+
+3. **Now click the “Network” tab on the left-side menu**
+
+- Explor what is returned in the network list. "Ctrl+F" to search for your implant name
+
+4. **Now click the “File System” tab on the left-side menu**
+
+- Browse to the location we know our implant to be running from
+
+
+5. **Inspect the hash of the suspicious executable by scanning it with VirusTotal**
+
+> “Item not found” on VirusTotal doesn't mean that this file is innocent, it just might not that scanned before. This makes sense because you just generated this payload, so of course it’s not likely to be seen by VirusTotal before. So, if you already suspect a file to be possible malware, but VirusTotal has never seen it before, trust your instincts. This actually makes a file even more suspicious because nearly everything has been seen by VirusTotal, so your sample may have been custom-crafted/targeted.
+
+6. **Click “Timeline” on the left-side menu of our sensor. This is a real-time view of EDR telemetry + event logs streaming from this system**
+
+- Read about the various EDR events in the LimaCharlie docs.
+
+- Filter your timeline with known IOCs (indicators of compromise) such as the name of your implant or the known C2 IP address
+
+- If you scroll back far enough, should be able to find the moment your implant was created on the system, and when it was launched shortly after, and the network connections it created immediately after
+
+
+7. **Examine the other events related to your implant process** 
+
+- you’ll see it is responsible for other events such as “SENSITIVE_PROCESS_ACCESS” from when you enumerated your privileges in an earlier step. This particular event will be useful later on when you will craft your first detection rule
+
+> I recommend spending more time exploring LimaCharlie telemetry to familiarize yourself not only with the known-bad events, but also the abundance of “normal” things happening on your “idle” Windows VM.
   </details>
 
 <details>
