@@ -381,14 +381,14 @@ ps -T
 
 > Explore what is returned in the process tree. Hover over some of the icons to see what they represent
 
-![Image](assets/1.gif)
+![Image](https://imgur.com/GZ9FZm0.png)
 Knowing common processes on a system is very important. As professionals say at SANS, *“you must know normal before you can find evil”* Check out this [“Hunt Evil”](https://www.sans.org/posters/hunt-evil/) poster from SANS.
 
 
 2. **One of the easiest ways to spot unusual processes is to simply look for ones that are NOT signed**
 - The C2 implant shows as not signed, and is also active on the network.
 
-![Image](assets/2.gif)
+![Image](https://imgur.com/2frmDNQ.png)
 
 - Notice how quickly we are able to identify the destination IP this process is communicating with.
 
@@ -414,7 +414,7 @@ Knowing common processes on a system is very important. As professionals say at 
 
 - If you scroll back far enough, should be able to find the moment your implant was created on the system, and when it was launched shortly after, and the network connections it created immediately after
 
-![Image](assets/4.gif)
+![Image](https://imgur.com/pV7Z8qm.png)
 
 7. **Examine the other events related to your implant process** 
 
