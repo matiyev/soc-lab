@@ -418,12 +418,10 @@ Knowing common processes on a system is very important. As professionals say at 
 
 > I recommend spending more time exploring LimaCharlie telemetry to familiarize yourself not only with the known-bad events, but also the abundance of “normal” things happening on your “idle” Windows VM.
 
-
+test
   </details>
 
 <details>
   <summary><h2><b>Section :  </b></h2></summary>
 
   </details>
-
-[def]: assets/3.gif
