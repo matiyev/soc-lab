@@ -417,6 +417,7 @@ Knowing common processes on a system is very important. As professionals say at 
 - you’ll see it is responsible for other events such as “SENSITIVE_PROCESS_ACCESS” from when you enumerated your privileges in an earlier step. This particular event will be useful later on when you will craft your first detection rule
 
 > I recommend spending more time exploring LimaCharlie telemetry to familiarize yourself not only with the known-bad events, but also the abundance of “normal” things happening on your “idle” Windows VM.
+
 ![Image](assets/3.gif)
   </details>
 
