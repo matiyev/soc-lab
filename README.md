@@ -437,41 +437,40 @@ Go back into Sliver C2 session and do some shady stuff that you would be able to
 ```
 getprivs
 ```
-- A powerful command to check privilege for is *SeDebugPrivilege* which opens the door for many things. If you’ve got that, we’re good. If you don’t you, need to relaunch your C2 implant with administrative rights
+- A powerful command to check privilege for *SeDebugPrivilege* which opens the door for many things. If you’ve got that, we’re good. If you don’t, you need to relaunch your C2 implant with administrative rights
 
-- Next, do something adversaries love to do for stealing credentials on a system — *dump the lsass.exe process from memory* Read more about this technique [here](https://www.microsoft.com/en-us/security/blog/2022/10/05/detecting-and-preventing-lsass-credential-dumping-attacks/)
+- Next, do something adversaries love to do for stealing credentials on a system — *dump the lsass.exe process from memory.* Read more about this technique [here](https://www.microsoft.com/en-us/security/blog/2022/10/05/detecting-and-preventing-lsass-credential-dumping-attacks/)
 ```
 procdump -n lsass.exe -s lsass.dmp
 ```
 This will dump the remote process from memory, and save it locally on your Sliver C2 server.
 
->
-NOTE: This will fail if you did not launch your C2 payload with admin rights on the Windows system. Even if it fails it will generate telemetry need.
+> NOTE: This will fail if you did not launch your C2 payload with admin rights on the Windows system. Even if it fails it will generate telemetry need.
 
 2. **Now Let’s Detect It**
 
 Now, switch over to LimaCharlie to find the relevant telemetry
 
-- Since *lsass.exe* is a known sensitive process often targeted by credential dumping tools, any good EDR will generate events for this.
+- Since *lsass.exe* is a known sensitive process often targeted by credential dumping tools, any good EDR will generate events for this
 
 - Go to "Timeline" of your Windows VM sensor and use the “Event Type Filters” to filter for “SENSITIVE_PROCESS_ACCESS” events.
-There will likely be many of these, but pick any one of them as there isn’t much else on this system that will be legitimately accessing lsass.
+There will likely be many of these, but pick any one of them as there isn’t much else on this system that will be legitimately accessing "lsass"
 ![Image](https://imgur.com/Su8gSsG.png)
 
 
-- Now that we know what the event looks like when credential access occurred, we have what we need to craft a detection & response (D&R) rule that would alert anytime this activity occurs.
+- Now that we know what the event looks like when credential access occurred, we have what we need to craft a detection & response (D&R) rule that would alert anytime this activity occurs
 ![Image](https://imgur.com/mNWqOEt.png)
-- Click the button in the screenshot to begin building a detection rule based on this event.
+- Click the button in the screenshot to begin building a detection rule based on this event
 
 - In the “Detect” section of the new rule, remove all contents and replace them with this
-![Image](https://imgur.com/oxRKaBy.png)
 ```
 event: SENSITIVE_PROCESS_ACCESS
 op: ends with
 path: event/*/TARGET/FILE_PATH
 value: lsass.exe
 ```
-- We’re specifying that this detection should only look at SENSITIVE_PROCESS_ACCESS events where the victim or target process ends with lsass.exe
+![Image](https://imgur.com/oxRKaBy.png)
+- We’re specifying that this detection should only look at *"SENSITIVE_PROCESS_ACCESS"* events where the victim or target process ends with "lsass.exe"
 
 - In the “Respond” section of the new rule, remove all contents and replace them with this
 ```
@@ -480,33 +479,25 @@ name: LSASS access
 ```
 - We’re telling LimaCharlie to simply generate a detection “report” anytime this detection occurs. We could ultimately tell this rule to do all sorts of things, like terminate process chain, etc.
 
-- Now let’s test our rule against the event we built it for. Lucky for us, LimaCharlie carried over that event it provides a quick and easy way to test the D&R logic.
-
-- Click “Target Event” below the D&R rule you just wrote. Here you will see the raw event we observed in the timeline earlier
+- Now let’s test our rule against the event we built it for. Lucky for us, LimaCharlie carried over that event it provides a quick and easy way to test the D&R logic. Click “Target Event” below the D&R rule you just wrote. Here you will see the raw event we observed in the timeline earlier
 
 - Scroll to the bottom of the raw event and click “Test Event” to see if our detection would work against this event.
-![Image](https://imgur.com/W00C0rY.png)
 ![Image](https://imgur.com/W00C0rY.png)
 - Notice that we have a “Match” and the D&R engine tells you exactly what it matched on.
 ![Image](https://imgur.com/mM1Vae5.png)
 
 - Scroll back up and click “Save Rule” and give it the name “LSASS Accessed” and be sure it is enabled
 
-3. Return to your Sliver server console, back into your C2 session, and rerun same *"procdump command"*
-
-
-![Image](.png)
-
+3. **Return to your Sliver server console, back into your C2 session, and rerun same *"procdump command"**
 
 - After rerunning the procdump command, go to the “Detections” tab on the LimaCharlie main left-side menu.
 ![Image](https://imgur.com/buIAvmX.png)
 
->
-Congratulations! You’ve just detected a threat with your own detection signature! Expand a detection to see the raw event
+> Congratulations! You’ve just detected a threat with your own detection signature! Expand a detection to see the raw event
 
 ![Image](https://imgur.com/FZFn6xt.png)
 
-- Notice you can also go straight to the timeline where this event occurred by clicking “View Event Timeline” from the Detection entry.
+- Notice you can also go straight to the timeline where this event occurred by clicking “View Event Timeline” from the Detection entry
   </details>
 
 
