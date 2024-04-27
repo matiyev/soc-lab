@@ -581,5 +581,6 @@ whoami
 
   <details>
   <summary><h2><b>Section 10: Automated YARA Scanning</b></h2></summary>
+  
 *Writing*
   </details>
