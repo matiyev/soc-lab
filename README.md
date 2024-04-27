@@ -488,7 +488,7 @@ name: LSASS access
 
 - Scroll back up and click “Save Rule” and give it the name “LSASS Accessed” and be sure it is enabled
 
-3. **Return to your Sliver server console, back into your C2 session, and rerun same *"procdump command"**
+3. **Return to your Sliver server console, back into your C2 session, and rerun same "procdump command"**
 
 - After rerunning the procdump command, go to the “Detections” tab on the LimaCharlie main left-side menu.
 ![Image](https://imgur.com/buIAvmX.png)
@@ -517,7 +517,7 @@ vssadmin delete shadows /all
 
 > If you have issues reestablishing your HTTP listener, try rebooting your Ubuntu system
 
-In your Sliver C2 shell on the victim, run this command
+In your Sliver C2 shell on the victim, run this command:
 ```
 shell
 ```
@@ -542,6 +542,7 @@ whoami
 ![Image](https://imgur.com/v8rFY9i.png)
 - Craft a Detection & Response (D&R) rule from this event
 ![Image](https://imgur.com/Cjq9dBC.png)
+
 From this D&R rule template, we can begin crafting our response action that will take place when this activity is observed. Add the following *"Response"* rule to the Respond section:
 ```
 - action: report
@@ -579,6 +580,6 @@ whoami
   </details>
 
   <details>
-  <summary><h2><b>Section :  </b></h2></summary>
-
+  <summary><h2><b>Section 10: Automated YARA Scanning</b></h2></summary>
+*Writing*
   </details>
