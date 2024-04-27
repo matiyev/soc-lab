@@ -582,7 +582,7 @@ whoami
   <details>
   <summary><h2><b>Section 10: Automated YARA Scanning</b></h2></summary>
 The goal of this section is to take advantage of a more advanced capability of any good EDR sensor, to automatically scan files or processes for the presence of malware based on a YARA signature.
-
+<br></br>
 > What is YARA? YARA is a tool primarily used for identifying and classifying malware based on textual or binary patterns. It allows researchers and security professionals to craft rules that describe unique characteristics of specific malware families or malicious behaviors. These rules can then be applied to files, processes, or even network traffic to detect potential threats. When analyzing a compromised system, YARA helps in filtering through large amounts of data to find malicious artifacts by matching them against a set of predefined rules. This ability to create customized detection signatures is particularly useful in threat hunting and incident response, enabling fast identification of known and even previously unknown malicious elements.
 
 There are many free and open source YARA scanners and rulesets. You can read more about YARA from [VirusTotal](https://virustotal.github.io/yara/) or explore one of the many open source [YARA rulesets](https://github.com/Yara-Rules/rules).
@@ -802,31 +802,10 @@ C:\Users\User\Downloads\[payload_name].exe
 Head over to your Detections tab and see what happened!
 ![Image](https://imgur.com/ioH03cw.png)
 - You should see an initial alert for Execution from Downloads directory followed shortly by a YARA detection in Memory once the scan kicked off and found Sliver inside the EXE
-```
-✄╔═╦╦═╦╦╗╔═╦═╦╦╦══╦╗╔╦═╦══╗╔══╦══╗
-✄╚╗║║║║║║║╔╣╬║║║══╣╚╝║╦╩╗╗║╚║║╩╗╔╝
-✄╔╩╗║║║║║║╚╣╗╣║╠══║╔╗║╩╦╩╝║╔║║╗║║
-✄╚══╩═╩═╝╚═╩╩╩═╩══╩╝╚╩═╩══╝╚══╝╚╝
-```
-```
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-─████████──████████─██████████████─██████──██████────██████──────────██████─██████████████─██████████─██████─────────██████████████─████████████──────██████████─██████████████─██████─
-─██░░░░██──██░░░░██─██░░░░░░░░░░██─██░░██──██░░██────██░░██████████──██░░██─██░░░░░░░░░░██─██░░░░░░██─██░░██─────────██░░░░░░░░░░██─██░░░░░░░░████────██░░░░░░██─██░░░░░░░░░░██─██░░██─
-─████░░██──██░░████─██░░██████░░██─██░░██──██░░██────██░░░░░░░░░░██──██░░██─██░░██████░░██─████░░████─██░░██─────────██░░██████████─██░░████░░░░██────████░░████─██████░░██████─██░░██─
-───██░░░░██░░░░██───██░░██──██░░██─██░░██──██░░██────██░░██████░░██──██░░██─██░░██──██░░██───██░░██───██░░██─────────██░░██─────────██░░██──██░░██──────██░░██───────██░░██─────██░░██─
-───████░░░░░░████───██░░██──██░░██─██░░██──██░░██────██░░██──██░░██──██░░██─██░░██████░░██───██░░██───██░░██─────────██░░██████████─██░░██──██░░██──────██░░██───────██░░██─────██░░██─
-─────████░░████─────██░░██──██░░██─██░░██──██░░██────██░░██──██░░██──██░░██─██░░░░░░░░░░██───██░░██───██░░██─────────██░░░░░░░░░░██─██░░██──██░░██──────██░░██───────██░░██─────██░░██─
-───────██░░██───────██░░██──██░░██─██░░██──██░░██────██░░██──██░░██──██░░██─██░░██████░░██───██░░██───██░░██─────────██░░██████████─██░░██──██░░██──────██░░██───────██░░██─────██████─
-───────██░░██───────██░░██──██░░██─██░░██──██░░██────██░░██──██░░██████░░██─██░░██──██░░██───██░░██───██░░██─────────██░░██─────────██░░██──██░░██──────██░░██───────██░░██────────────
-───────██░░██───────██░░██████░░██─██░░██████░░██────██░░██──██░░░░░░░░░░██─██░░██──██░░██─████░░████─██░░██████████─██░░██████████─██░░████░░░░██────████░░████─────██░░██─────██████─
-───────██░░██───────██░░░░░░░░░░██─██░░░░░░░░░░██────██░░██──██████████░░██─██░░██──██░░██─██░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░████────██░░░░░░██─────██░░██─────██░░██─
-───────██████───────██████████████─██████████████────██████──────────██████─██████──██████─██████████─██████████████─██████████████─████████████──────██████████─────██████─────██████─
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-```
+
 ```
 ░▀▄─────▄▀░▐█▀▀█▌░█░█──░██▄─░█▌─░▄█▀▄─░▐██░██───░▐█▀▀░▐█▀█▄──░▐██░█▀█▀█░█ 
 ──░▀▄─▄▀──░▐█▄░█▌░█░█──░▐█░█░█─░▐█▄▄▐█─░█▌░██───░▐█▀▀░▐█▌▐█───░█▌──░█───▀ 
 ────░█────░▐██▄█▌░▀▄▀──░██─░██▌░▐█─░▐█░▐██░██▄▄█░▐█▄▄░▐█▄█▀──░▐██─░▄█▄─░▄ 
-
 ```
   </details>
