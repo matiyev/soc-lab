@@ -504,32 +504,32 @@ name: LSASS access
   <summary><h2><b>Section 9: Blocking Attacks</b></h2></summary>
 Wouldn’t it be great if we could block the threat rather than just generate an alert?
 
-Let’s skip to the fun part by crafting a rule that would be very effective at disrupting a ransomware attack by looking for a predictable action that ransomware tends to take: ["deletion of volume shadow copies."](https://redcanary.com/blog/its-all-fun-and-games-until-ransomware-deletes-the-shadow-copies/)
+Craft a rule that would be very effective at disrupting a ransomware attack by looking for a predictable action that ransomware tends to take: [Deletion of Volume Shadow Copies](https://redcanary.com/blog/its-all-fun-and-games-until-ransomware-deletes-the-shadow-copies/)
 
 > Why This Rule? "Volume Shadow Copies" provide a convenient way to restore individual files or even an entire file system to a previous state which makes it a very attractive option for recovering from a ransomware attack. For this reason, it’s become very predictable that one of the first signs of an impending ransomware attack is the "deletion of volume shadow copies".
 
-- A basic command that would accomplish this
-'''
+A basic command that would accomplish this
+```
 vssadmin delete shadows /all
-'''
+```
 
 1. **Get back into Sliver C2 shell**
 
-If you have issues reestablishing your HTTP listener, try rebooting your Ubuntu system
+> If you have issues reestablishing your HTTP listener, try rebooting your Ubuntu system
 
-- In your Sliver C2 shell on the victim, run the basic command we’re looking to detect and block
+In your Sliver C2 shell on the victim, run this command
 ```
 shell
 ```
 - When prompted with “This action is bad OPSEC, are you an adult?” type "Yes" if you are an adult, "No" if you are not :) and hit enter
 
-- In the new System shell, run the following command
+In the new System shell, run the following command:
 ```
 vssadmin delete shadows /all
 ```
 - The output is not important as there may or not be Volume Shadow Copies available on the VM to be deleted, but running the command is sufficient to generate the telemetry we need
 
-- Run this:
+Run this command to verify we still have an active system shell:
 ```
 whoami
 ```
@@ -542,7 +542,7 @@ whoami
 ![Image](https://imgur.com/v8rFY9i.png)
 - Craft a Detection & Response (D&R) rule from this event
 ![Image](https://imgur.com/Cjq9dBC.png)
-- From this D&R rule template, we can begin crafting our response action that will take place when this activity is observed. Add the following Response rule to the Respond section
+From this D&R rule template, we can begin crafting our response action that will take place when this activity is observed. Add the following *"Response"* rule to the Respond section:
 ```
 - action: report
   name: vss_deletion_kill_it
@@ -558,16 +558,17 @@ whoami
 - Save your rule with the following name: vss_deletion_kill_it
 
 3. **Test it**
+
 Now return to Sliver C2 session, and rerun the command and see what happens.
 
-- Run the command to delete volume shadows.
+Run the command to delete volume shadows:
 ```
 vssadmin delete shadows /all
 ```
 - The command should succeed, but the action of running the command is what will trigger our D&R rule
 ![Image](https://imgur.com/a4Dhfxc.png)
 
-Now, to test if our D&R rule properly terminated the parent process, check to see if you still have an active system shell by rerunning the *"whoami"* command
+Now, to test if our D&R rule properly terminated the parent process, check to see if you still have an active system shell by rerunning the *"whoami"* command:
 ```
 whoami
 ```
