@@ -581,6 +581,246 @@ whoami
 
   <details>
   <summary><h2><b>Section 10: Automated YARA Scanning</b></h2></summary>
+The goal of this section is to take advantage of a more advanced capability of any good EDR sensor, to automatically scan files or processes for the presence of malware based on a YARA signature.
 
-*Writing*
+> What is YARA? YARA is a tool primarily used for identifying and classifying malware based on textual or binary patterns. It allows researchers and security professionals to craft rules that describe unique characteristics of specific malware families or malicious behaviors. These rules can then be applied to files, processes, or even network traffic to detect potential threats. When analyzing a compromised system, YARA helps in filtering through large amounts of data to find malicious artifacts by matching them against a set of predefined rules. This ability to create customized detection signatures is particularly useful in threat hunting and incident response, enabling fast identification of known and even previously unknown malicious elements.
+
+There are many free and open source YARA scanners and rulesets. You can read more about YARA from [VirusTotal](https://virustotal.github.io/yara/) or explore one of the many open source [YARA rulesets](https://github.com/Yara-Rules/rules).
+
+Prepare LimaCharlie for detecting certain file system and process activities in order to trigger YARA scans.
+
+1. **Add a YARA signature for the Sliver C2 payload**
+
+Since we’re dealing with the Sliver C2 payload, we can be more targeted in by using a signature specifically looking for [Sliver](https://sliver.sh/docs?name=Getting+Started). I've used UK National Cyber Security Centre [publication](https://www.ncsc.gov.uk/files/Advisory%20Further%20TTPs%20associated%20with%20SVR%20cyber%20actors.pdf) on Sliver, including YARA signatures and other useful detections.
+
+![Image](https://imgur.com/klrX5b4.png)
+- Under “Automation” > “YARA Rules”, Click Add Yara Rule
+
+![Image](https://imgur.com/UDm7nMA.png)
+- Name the rule as "sliver"
+- Copy and paste the contents from the code snippet of the YARA Rules section of the [publication](https://www.ncsc.gov.uk/files/Advisory%20Further%20TTPs%20associated%20with%20SVR%20cyber%20actors.pdf) into the Rule block
+- Click “Save Rule”
+
+Now create one more YARA rule with a name "sliver-process" and Copy/Paste this:
+```
+rule sliver_strings {
+  meta:
+    author = "You"
+    description = "Detects Sliver Windows and Linux implants based on obvious strings"
+  strings:
+    $p1 = "/sliver/"
+    $p2 = "sliverpb"
+  condition:
+    all of ($p*)
+}
+```
+
+2. **Create D&R rules that will generate alerts whenever a YARA detection occurs**
+
+- Go to “Automation” > “D&R Rules”
+
+- Create a new rule
+
+In the Detect block, paste the following:
+```
+event: YARA_DETECTION
+op: and
+rules:
+  - not: true
+    op: exists
+    path: event/PROCESS/*
+  - op: exists
+    path: event/RULE_NAME
+```
+> Notice that we’re detecting on YARA detections not involving a PROCESS object, that’ll be its own rule shortly.
+
+In the Respond block, paste the following:
+```
+- action: report
+  name: YARA Detection {{ .event.RULE_NAME }}
+- action: add tag
+  tag: yara_detection
+  ttl: 80000
+```
+- Save the rule and title it "YARA Detection"
+
+Create another rule and in the Detect block, paste the following:
+```
+event: YARA_DETECTION
+op: and
+rules:
+  - op: exists
+    path: event/RULE_NAME
+  - op: exists
+    path: event/PROCESS/*
+```
+> Notice that this detection is looking for YARA Detections specifically involving a PROCESS object.
+
+In the Respond block, paste the following:
+```
+- action: report
+  name: YARA Detection in Memory {{ .event.RULE_NAME }}
+- action: add tag
+  tag: yara_detection_memory
+  ttl: 80000
+```
+- Save the rule and title it "YARA Detection in Memory"
+
+3. **Test the new YARA signature**
+
+Since we already know we have a Sliver implant sitting in the Downloads folder of our Windows VM, we can easily test our signature by initiating a manual YARA scan using the EDR sensor.
+
+- In LimaCharlie, browse to the “Sensors List” and click on our Windows VM sensor
+
+
+Access the EDR Sensor Console which allows us to run sensor commands against this endpoint
+
+
+Go to "Console" and run the following command to kick off a manual YARA scan of our Sliver payload:
+```
+yara_scan hive://yara/sliver -f C:\Users\User\Downloads\[payload_name].exe
+```
+> Replace [payload_name] with your actual payload name
+![Image](https://imgur.com/SsFumfj.png)
+- Hit enter
+- Now, also confirm that you have a new Detection on the “Detections” screen
+
+4. **Automatically YARA scan downloaded EXEs**
+
+- Browse to “Automation” > “D&R Rules”
+- Create a new rule
+
+In the Detect block, paste the following:
+```
+event: NEW_DOCUMENT
+op: and
+rules:
+  - op: starts with
+    path: event/FILE_PATH
+    value: C:\Users\
+  - op: contains
+    path: event/FILE_PATH
+    value: \Downloads\
+  - op: ends with
+    path: event/FILE_PATH
+    value: .exe
+```
+> Notice that this detection is simply looking for NEW .exe files to appear in any users Downloads directory
+
+In the Respond block, paste the following:
+```
+- action: report
+  name: EXE dropped in Downloads directory
+- action: task
+  command: >-
+    yara_scan hive://yara/sliver -f "{{ .event.FILE_PATH
+    }}"
+  investigation: Yara Scan Exe
+  suppression:
+    is_global: false
+    keys:
+      - '{{ .event.FILE_PATH }}'
+      - Yara Scan Exe
+    max_count: 1
+    period: 1m
+```
+> This response action generates an alert for the EXE creation, but more importantly, kicks off a YARA scan using the Sliver signature against the newly created EXE.
+
+- Save the rule and title it "YARA Scan Downloaded .exe"
+
+5. **Automatically YARA scan processes launched from Downloads directory**
+
+- Browse to “Automation” > “D&R Rules”
+- Create a new rule
+
+In the Detect block, paste the following:
+```
+event: NEW_PROCESS
+op: and
+rules:
+  - op: starts with
+    path: event/FILE_PATH
+    value: C:\Users\
+  - op: contains
+    path: event/FILE_PATH
+    value: \Downloads\
+```
+> This rule is matching any process that is launched from a user Downloads directory
+
+In the Respond block, paste the following:
+```
+- action: report
+  name: Execution from Downloads directory
+- action: task
+  command: yara_scan hive://yara/sliver-process --pid "{{ .event.PROCESS_ID }}"
+  investigation: Yara Scan Process
+  suppression:
+    is_global: false
+    keys:
+      - '{{ .event.PROCESS_ID }}'
+      - Yara Scan Process
+    max_count: 1
+    period: 1m
+```
+> Notice in this rule, we’re no longer scanning the "FILE_PATH", but the actual running process by specifying its "PROCESS_ID". We are also now using "sliver-process" rule
+
+- Save the rule and title it "YARA Scan Process Launched from Downloads"
+
+6. **Trigger the new rules**
+
+Scanning New EXEs in Downloads dir. You don't need to re-download Sliver payload, moving it another dir and putting back is enough to trigger.
+![Image](https://imgur.com/FBU0KaI.png)
+Run the following PowerShell command to move your Sliver payload from Downloads to Documents:
+```
+Move-Item -Path C:\Users\User\Downloads\[payload_name].exe -Destination C:\Users\User\Documents\[payload_name].exe
+```
+Now, put it back to generate the "NEW_DOCUMENT" event for an EXE being dropped into the Downloads folder
+```
+Move-Item -Path C:\Users\User\Documents\[payload_name].exe -Destination C:\Users\User\Downloads\[payload_name].exe
+```
+> Replace [payload_name] with your actual payload name
+
+Head over to your Detections tab and see what happened. It may take a moment.
+![Image](https://imgur.com/yN7iGRF.png)
+- As you can see an initial alert for EXE dropped in Downloads directory followed shortly by a YARA detection once the scan kicked off and found Sliver inside the EXE
+
+7. **Scanning processes launched from Downloads**
+
+Now test "NEW_PROCESS" rule to scan running processes launched from Downloads dir.
+![Image](https://imgur.com/dbznaGt.png)
+- Launch an Administrative PowerShell prompt
+
+First, check for any existing instances of Sliver C2 and kill it
+```
+Get-Process [payload_name] | Stop-Process
+```
+Execute your Sliver payload to create the "NEW_PROCESS" event we need to trigger the scanning of a process launched from the Downloads dir:
+```
+C:\Users\User\Downloads\[payload_name].exe
+```
+Head over to your Detections tab and see what happened!
+![Image](https://imgur.com/ioH03cw.png)
+- You should see an initial alert for Execution from Downloads directory followed shortly by a YARA detection in Memory once the scan kicked off and found Sliver inside the EXE
+```
+✄╔═╦╦═╦╦╗╔═╦═╦╦╦══╦╗╔╦═╦══╗╔══╦══╗
+✄╚╗║║║║║║║╔╣╬║║║══╣╚╝║╦╩╗╗║╚║║╩╗╔╝
+✄╔╩╗║║║║║║╚╣╗╣║╠══║╔╗║╩╦╩╝║╔║║╗║║
+✄╚══╩═╩═╝╚═╩╩╩═╩══╩╝╚╩═╩══╝╚══╝╚╝
+```
+```
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+─████████──████████─██████████████─██████──██████────██████──────────██████─██████████████─██████████─██████─────────██████████████─████████████──────██████████─██████████████─██████─
+─██░░░░██──██░░░░██─██░░░░░░░░░░██─██░░██──██░░██────██░░██████████──██░░██─██░░░░░░░░░░██─██░░░░░░██─██░░██─────────██░░░░░░░░░░██─██░░░░░░░░████────██░░░░░░██─██░░░░░░░░░░██─██░░██─
+─████░░██──██░░████─██░░██████░░██─██░░██──██░░██────██░░░░░░░░░░██──██░░██─██░░██████░░██─████░░████─██░░██─────────██░░██████████─██░░████░░░░██────████░░████─██████░░██████─██░░██─
+───██░░░░██░░░░██───██░░██──██░░██─██░░██──██░░██────██░░██████░░██──██░░██─██░░██──██░░██───██░░██───██░░██─────────██░░██─────────██░░██──██░░██──────██░░██───────██░░██─────██░░██─
+───████░░░░░░████───██░░██──██░░██─██░░██──██░░██────██░░██──██░░██──██░░██─██░░██████░░██───██░░██───██░░██─────────██░░██████████─██░░██──██░░██──────██░░██───────██░░██─────██░░██─
+─────████░░████─────██░░██──██░░██─██░░██──██░░██────██░░██──██░░██──██░░██─██░░░░░░░░░░██───██░░██───██░░██─────────██░░░░░░░░░░██─██░░██──██░░██──────██░░██───────██░░██─────██░░██─
+───────██░░██───────██░░██──██░░██─██░░██──██░░██────██░░██──██░░██──██░░██─██░░██████░░██───██░░██───██░░██─────────██░░██████████─██░░██──██░░██──────██░░██───────██░░██─────██████─
+───────██░░██───────██░░██──██░░██─██░░██──██░░██────██░░██──██░░██████░░██─██░░██──██░░██───██░░██───██░░██─────────██░░██─────────██░░██──██░░██──────██░░██───────██░░██────────────
+───────██░░██───────██░░██████░░██─██░░██████░░██────██░░██──██░░░░░░░░░░██─██░░██──██░░██─████░░████─██░░██████████─██░░██████████─██░░████░░░░██────████░░████─────██░░██─────██████─
+───────██░░██───────██░░░░░░░░░░██─██░░░░░░░░░░██────██░░██──██████████░░██─██░░██──██░░██─██░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░░░░░████────██░░░░░░██─────██░░██─────██░░██─
+───────██████───────██████████████─██████████████────██████──────────██████─██████──██████─██████████─██████████████─██████████████─████████████──────██████████─────██████─────██████─
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+```
   </details>
