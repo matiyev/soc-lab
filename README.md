@@ -1,5 +1,5 @@
 # SOC-MOCK
-![Image](.png)
+![Image](https://imgur.com/IurHdlf.png)
 ## Objective 
 This project aimed to build a realistic Security Operations Center (SOC) training environment focusing on practical skills for detecting and responding to cyber threats.
 - Advanced threat detection tools like Sysmon and LimaCharlie EDR were deployed for real-time analysis
