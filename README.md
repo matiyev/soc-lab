@@ -23,10 +23,10 @@ This project aimed to build a realistic Security Operations Center (SOC) trainin
   <summary><h2><b>Section 1: Setting up the Virtual Environment</b></h2></summary>
   This section will guide through the setup of virtual environment using VirtualBox (If you want you, can use VMware as well). Configure a NAT network and install two virtual machines – one for Ubuntu Server and another for a Windows 10. <br><br>
 
-   **1: Download and setup Virtualbox**:  
+   **Step 1: Download and setup Virtualbox**:  
     You can download Virtualbox from here. Setup is pretty straightforward
     <br><br>
-   **2: Create a New VM for Windows 10**:  
+   **Step 2: Create a New VM for Windows 10**:  
    Next, set up a new virtual machine in VirtualBox for Windows 10.
   - **Create it with following minimum specs:**
    - RAM: Approx 2 GB
@@ -34,7 +34,7 @@ This project aimed to build a realistic Security Operations Center (SOC) trainin
    - Hard Disk Storage: 50 GB
     <br><br>
     
-   **3: Create a New VM for Ubuntu Server**:  
+   **Step 3: Create a New VM for Ubuntu Server**:  
     Now, set up a new virtual machine in VirtualBox for Ubuntu Server.
   - **Create it with following minimum specs:**
    - RAM: Approx 2 GB
@@ -47,7 +47,7 @@ This project aimed to build a realistic Security Operations Center (SOC) trainin
   ![Image](https://imgur.com/9VNGxVp.png)
     <br><br>
        
-   **4: Configure Windows VM**:  
+   **Step 4: Configure Windows VM**:  
     Permanently disable Microsoft Defender so it doesn’t interfere with the fun stuff we’re planning. This is pretty tricky (especially in Windows 11) as Defender will turn itself back on.
 1. Disable Tamper Protection
   - Go to "Windows Security"
